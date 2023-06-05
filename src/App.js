@@ -1,23 +1,60 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import axios from 'axios';
 
 function App() {
+
+  const [location,setLocation] = useState('');
+  const [data,setData] = useState(null);
+  
+  const fetchWeather = async() =>
+  {
+    try
+    {
+      const response = await axios.get(`https://api.weatherapi.com/v1/current.json?key=2bb3344ceb404fe68eb63451230506&q=${location}`);
+      setData(response.data);
+    }
+    catch(error)
+    {
+      console.error('Error:',error);
+    }
+    
+  };
+
+  useEffect(()=>{
+    if(location)
+    {
+      fetchWeather();
+    }
+  });
+
+  const handleInputChange = (e) =>
+  {
+    setLocation(e.target.value);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='flex flex-col h-screen'>
+
+      <div className='h-1/3 bg-green-200 items-center justify-center flex flex-col'>
+        <h3 className='text-base font-bold'>Weather Details</h3>
+        <input type='text' placeholder='Location' value={location} onChange={handleInputChange} className='mt-2'/>
+      </div>
+
+      <div className='h-2/3 bg-white items-center justify-center flex'>
+        {data?
+        (
+          <div>
+            <p>Location : {data.location.name},{data.location.country}</p>
+            <p>Temperature : {data.current.temp_c}<sup>o</sup>C</p>
+            <p>Condition : {data.current.condition.text}</p>
+          </div>
+        ):
+        (
+          <p>No data available!</p>
+        )}
+      </div>
+
     </div>
   );
 }
