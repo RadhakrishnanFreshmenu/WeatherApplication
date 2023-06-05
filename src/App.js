@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import Input from './components/Input';
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
 
       <div className='h-1/3 bg-green-200 items-center justify-center flex flex-col'>
         <h3 className='text-base font-bold'>Weather Details</h3>
-        <input type='text' placeholder='Location' value={location} onChange={handleInputChange} className='mt-2'/>
+        <Input placeholder='Location' value={location} onChange={handleInputChange}/>
       </div>
 
       <div className='h-2/3 bg-white items-center justify-center flex'>
